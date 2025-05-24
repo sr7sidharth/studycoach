@@ -1,0 +1,1 @@
+docker run --name studycoach-db -e POSTGRES_USER=studyuser -e POSTGRES_PASSWORD=studypass -e POSTGRES_DB=studycoach -p 5432:5432 -d postgres
