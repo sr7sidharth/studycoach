@@ -6,10 +6,14 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
+  logging:
+    level:
+      org.hibernate.SQL: OFF
+      org.hibernate.type.descriptor.sql.BasicBinder: OFF
   mail:
     host: smtp.gmail.com
     port: 587
@@ -21,6 +25,36 @@ spring:
           auth: true
           starttls:
             enable: true
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: mistral
+studycoach:
+  topics:
+    - arrays
+    - hashmaps
+    - sliding window
+    - two pointers
+    - stack
+    - queue
+    - binary search
+    - sliding window
+    - linked list
+    - trees
+    - tries
+    - backtracking
+    - heaps
+    - priority queue
+    - interval
+    - greedy
+    - dynamic programming
+    - graphs
+  trusted sources:
+    - NeetCode
+    - Gaurav Sen
+    - Hello Interview
 
 server:
   port: 8080

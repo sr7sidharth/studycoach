@@ -1,8 +1,6 @@
 package com.jobprep.randomserver.youtube;
 
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
@@ -45,6 +43,17 @@ public class YTClient {
         return request.execute().getItems();
     }
 
+    public List<SearchResult> searchForVideos(String query, long maxResults) throws IOException {
+        YouTube.Search.List searchRequest = youtube.search()
+                .list(List.of("snippet"))
+                .setQ(query)
+                .setMaxResults(maxResults)
+                .setType(List.of("video"))
+                .setOrder("relevance")
+                .setFields("items(id/videoId,snippet/title,snippet/channelTitle,snippet/publishedAt)");
+        SearchListResponse response = searchRequest.execute();
+        return response.getItems();
+    }
 
     public void addVideoToLCPlaylist(String videoId) throws IOException {
         ResourceId resourceId = new ResourceId();
@@ -59,5 +68,18 @@ public class YTClient {
         item.setSnippet(snippet);
 
         youtube.playlistItems().insert(List.of("snippet"), item).execute();
+    }
+
+    public void clearLCPlaylist() throws IOException {
+        YouTube.PlaylistItems.List request = youtube.playlistItems()
+                .list(List.of("id"))
+                .setPlaylistId(LC_PLAYLIST_ID)
+                .setMaxResults(20L);
+        List<PlaylistItem> items = request.execute().getItems();
+
+        for (PlaylistItem item: items){
+            youtube.playlistItems()
+                    .delete(item.getId()).execute();
+        }
     }
 }

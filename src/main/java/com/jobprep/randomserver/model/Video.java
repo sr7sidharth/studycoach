@@ -19,12 +19,9 @@ public class Video {
     private String videoId;
 
     private String title;
+    private String creator;
     private String topic;
     private String url;
 
-    private int duration;
-
-    private boolean completed;
     private LocalDateTime createdAt;
-    private LocalDateTime completedAt;
 }

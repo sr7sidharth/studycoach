@@ -25,12 +25,12 @@ public class VideoDataLoader {
                 .registerModule(new JavaTimeModule());
     }
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void loadData() throws IOException {
-        InputStream input = getClass().getResourceAsStream("/initialize_videos.json");
-        List<Video> videos = Arrays.asList(
-                objectMapper.readValue(input, Video[].class)
-        );
-        videoRepository.saveAll(videos);
-    }
+//    @EventListener(ApplicationReadyEvent.class)
+//    public void loadData() throws IOException {
+//        InputStream input = getClass().getResourceAsStream("/initialize_videos.json");
+//        List<Video> videos = Arrays.asList(
+//                objectMapper.readValue(input, Video[].class)
+//        );
+//        videoRepository.saveAll(videos);
+//    }
 }

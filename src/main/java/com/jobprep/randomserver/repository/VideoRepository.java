@@ -10,8 +10,8 @@ import java.util.List;
 
 @Repository
 public interface VideoRepository extends JpaRepository<Video, String> {
-    @Query("SELECT v FROM Video v WHERE v.duration > :min")
-    List<Video> findVideosLengthGreater(@Param("min") int min);
-
-    List<Video> findByCompletedFalse();
+//    @Query("SELECT v FROM Video v WHERE v.duration > :min")
+//    List<Video> findVideosLengthGreater(@Param("min") int min);
+//
+//    List<Video> findByCompletedFalse();
 }
