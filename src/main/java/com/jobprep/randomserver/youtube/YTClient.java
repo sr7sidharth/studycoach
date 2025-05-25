@@ -6,9 +6,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
-import com.google.api.services.youtube.model.PlaylistItem;
-import com.google.api.services.youtube.model.PlaylistItemSnippet;
-import com.google.api.services.youtube.model.ResourceId;
+import com.google.api.services.youtube.model.*;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -16,6 +14,7 @@ import java.util.List;
 
 @Service
 public class YTClient {
+    public static final String CHANNEL_ID = "UCN5xN3dgAk3_PHmmQO2eRow";
     private final YouTube youtube;
 
     public YTClient(YTAuthService authService) throws Exception {
@@ -25,6 +24,18 @@ public class YTClient {
                 JacksonFactory.getDefaultInstance(),
                 credential
         ).setApplicationName("studycoach").build();
+
+        YouTube.Playlists.List request = youtube.playlists()
+                .list(List.of("snippet,contentDetails"));
+        PlaylistListResponse response = request.setChannelId(CHANNEL_ID)
+                .setMaxResults(25L)
+                .execute();
+        response.getItems().stream()
+                .forEach(
+                        playlist -> {
+                            System.out.println(playlist.getSnippet().getTitle());
+                        }
+                );
     }
 
     public List<PlaylistItem> fetchFromSourcePlaylist(String playlistId) throws IOException {

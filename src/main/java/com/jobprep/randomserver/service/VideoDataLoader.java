@@ -5,6 +5,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jobprep.randomserver.model.Video;
 import com.jobprep.randomserver.repository.VideoRepository;
 import jakarta.annotation.PostConstruct;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -23,7 +25,7 @@ public class VideoDataLoader {
                 .registerModule(new JavaTimeModule());
     }
 
-    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
     public void loadData() throws IOException {
         InputStream input = getClass().getResourceAsStream("/initialize_videos.json");
         List<Video> videos = Arrays.asList(
