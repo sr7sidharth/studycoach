@@ -14,28 +14,26 @@ import java.util.List;
 
 @Service
 public class YTClient {
-    public static final String CHANNEL_ID = "UCN5xN3dgAk3_PHmmQO2eRow";
+    private static final String CHANNEL_ID = "UCN5xN3dgAk3_PHmmQO2eRow";
+    private static final String LC_PLAYLIST_ID = "PLmeMsiT-_DHMUzCdUpFsaNs-bmfwYiVQv";
     private final YouTube youtube;
 
     public YTClient(YTAuthService authService) throws Exception {
-        Credential credential = authService.authorize();
+        Credential credential = authService.loadCredential();
         this.youtube = new YouTube.Builder(
                 new NetHttpTransport(),
                 JacksonFactory.getDefaultInstance(),
                 credential
         ).setApplicationName("studycoach").build();
+    }
 
+    public List<Playlist> getPlaylists() throws IOException {
         YouTube.Playlists.List request = youtube.playlists()
                 .list(List.of("snippet,contentDetails"));
         PlaylistListResponse response = request.setChannelId(CHANNEL_ID)
                 .setMaxResults(25L)
                 .execute();
-        response.getItems().stream()
-                .forEach(
-                        playlist -> {
-                            System.out.println(playlist.getSnippet().getTitle());
-                        }
-                );
+        return response.getItems();
     }
 
     public List<PlaylistItem> fetchFromSourcePlaylist(String playlistId) throws IOException {
@@ -47,13 +45,14 @@ public class YTClient {
         return request.execute().getItems();
     }
 
-    public void addToPersonalPlaylist(String videoId, String playlistId) throws IOException {
+
+    public void addVideoToLCPlaylist(String videoId) throws IOException {
         ResourceId resourceId = new ResourceId();
         resourceId.setKind("youtube#video");
         resourceId.setVideoId(videoId);
 
         PlaylistItemSnippet snippet = new PlaylistItemSnippet();
-        snippet.setPlaylistId(playlistId);
+        snippet.setPlaylistId(LC_PLAYLIST_ID);
         snippet.setResourceId(resourceId);
 
         PlaylistItem item = new PlaylistItem();
